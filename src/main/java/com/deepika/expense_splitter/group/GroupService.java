@@ -32,7 +32,9 @@ public class GroupService {
     {
         User creator= findUser(request.createdByUserId());
         Group group = groupRepository.save(
-                new Group(request.name(), request.description(), creator));
+                new Group(request.name(),
+                        request.description(),
+                        creator));
         groupMemberRepository.save(new GroupMember(group, creator));
         return toResponse(group);
     }
@@ -75,10 +77,16 @@ public class GroupService {
     private GroupResponse toResponse(Group group) {
         List<MemberResponse> members = groupMemberRepository.findByGroupId(group.getId()).stream()
                 .map(m -> new MemberResponse(
-                        m.getUser().getId(), m.getUser().getName(), m.getUser().getEmail()))
+                        m.getUser().getId(),
+                        m.getUser().getName(),
+                        m.getUser().getEmail()))
                 .toList();
-        return new GroupResponse(group.getId(), group.getName(), group.getDescription(),
-                group.getCreatedBy().getId(), group.getCreatedAt(), members);
+        return new GroupResponse(group.getId(),
+                group.getName(),
+                group.getDescription(),
+                group.getCreatedBy().getId(),
+                group.getCreatedAt(),
+                members);
     }
 
 }

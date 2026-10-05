@@ -45,4 +45,12 @@ public class GlobalExceptionHandler {
                 "Something went wrong", null);
         return ResponseEntity.internalServerError().body(body);
     }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponse> handleBadRequest(BadRequestException ex)
+    {
+        ErrorResponse body = new ErrorResponse(
+                LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), null);
+        return ResponseEntity.badRequest().body(body);
+    }
+
 }

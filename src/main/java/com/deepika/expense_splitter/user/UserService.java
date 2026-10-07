@@ -1,10 +1,12 @@
 package com.deepika.expense_splitter.user;
 
+
 import com.deepika.expense_splitter.user.dto.CreateUserRequest;
 import com.deepika.expense_splitter.user.dto.UpdateUserRequest;
 import com.deepika.expense_splitter.user.dto.UserResponse;
 import com.deepika.expense_splitter.exception.DuplicateResourceException;
 import com.deepika.expense_splitter.exception.ResourceNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,11 +14,13 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder) {    // 2. new parameter
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;              // 3. assign it
     }
-
     public List<UserResponse> getAllUsers()
     {
         return userRepository.findAll()
@@ -31,7 +35,8 @@ public class UserService {
         {
             throw new DuplicateResourceException("Email already Registered");
         }
-        User user = new User(request.name(),request.email(), request.password());
+        User user = new User(request.name(), request.email(),
+                passwordEncoder.encode(request.password()));
         User saved = userRepository.save(user);
         return toResponse(saved);
     }

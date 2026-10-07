@@ -74,5 +74,11 @@ public class GlobalExceptionHandler {
                 "Malformed request body (check field names, types and splitType)", null);
         return ResponseEntity.badRequest().body(body);
     }
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedException ex) {
+        ErrorResponse body = new ErrorResponse(
+                LocalDateTime.now(), HttpStatus.UNAUTHORIZED.value(), ex.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
 
 }

@@ -1,9 +1,10 @@
 package com.deepika.expense_splitter.settlement;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.deepika.expense_splitter.settlement.dto.CreateSettlementRequest;
+import com.deepika.expense_splitter.settlement.dto.SettlementResponse;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +20,16 @@ public class SettlementController {
     @GetMapping("/suggested")
     public List<SuggestedSettlement> getSuggested(@PathVariable Long groupId) {
         return settlementService.getSuggestedSettlements(groupId);
+    }
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public SettlementResponse recordSettlement(@PathVariable Long groupId,
+                                               @Valid @RequestBody CreateSettlementRequest request) {
+        return settlementService.recordSettlement(groupId, request);
+    }
+
+    @GetMapping
+    public List<SettlementResponse> getSettlements(@PathVariable Long groupId) {
+        return settlementService.getSettlements(groupId);
     }
 }

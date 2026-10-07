@@ -7,6 +7,8 @@ public record MemberBalance(
         String name,
         BigDecimal totalPaid,
         BigDecimal totalShare,
+        BigDecimal settlementsMade,
+        BigDecimal settlementsReceived,
         BigDecimal netBalance
 ) {
 }
